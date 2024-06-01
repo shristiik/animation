@@ -1,0 +1,64 @@
+BEGIN
+
+    // Step 1: Initialize Pygame and Setup Display
+    IMPORT pygame, sys, random
+    CALL pygame.init()
+    SET screen_width TO 800
+    SET screen_height TO 600
+    SET screen TO pygame.display.set_mode((screen_width, screen_height))
+    CALL pygame.display.set_caption("Enhanced Animation")
+
+    // Step 2: Define Colors and Load Images
+    SET WHITE TO (255, 255, 255)
+    SET image TO pygame.image.load('your_image.png')
+    SET image TO pygame.transform.scale(image, (100, 100))
+    SET image_rect TO image.get_rect()
+    SET background TO pygame.image.load('background_image.png')
+    SET background TO pygame.transform.scale(background, (screen_width, screen_height))
+
+    // Step 3: Initialize Position and Movement Variables
+    SET x TO random.randint(0, screen_width - image_rect.width)
+    SET y TO random.randint(0, screen_height - image_rect.height)
+    SET dx TO random.choice([-5, 5])
+    SET dy TO random.choice([-5, 5])
+
+    // Step 4: Main Loop
+    SET running TO True
+    WHILE running IS True DO
+
+        // Event Handling
+        FOR each event IN pygame.event.get() DO
+            IF event.type IS pygame.QUIT THEN
+                SET running TO False
+            ELSE IF event.type IS pygame.KEYDOWN THEN
+                IF event.key IS pygame.K_r THEN
+                    SET x TO random.randint(0, screen_width - image_rect.width)
+                    SET y TO random.randint(0, screen_height - image_rect.height)
+                    SET dx TO random.choice([-5, 5])
+                    SET dy TO random.choice([-5, 5])
+
+        // Update Position
+        SET x TO x + dx
+        SET y TO y + dy
+
+        // Boundary Checking
+        IF x < 0 OR x + image_rect.width > screen_width THEN
+            SET dx TO -dx
+        IF y < 0 OR y + image_rect.height > screen_height THEN
+            SET dy TO -dy
+
+        // Drawing
+        CALL screen.blit(background, (0, 0))
+        CALL screen.blit(image, (x, y))
+
+        // Update Display
+        CALL pygame.display.flip()
+        CALL pygame.time.Clock().tick(30)
+
+    END WHILE
+
+    // Step 5: Quit Pygame
+    CALL pygame.quit()
+    CALL sys.exit()
+
+END
